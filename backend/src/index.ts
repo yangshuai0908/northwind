@@ -18,7 +18,7 @@ const app = express();
 // Clerk webhook 需要用原始 body 做签名校验，因此不能用 express.json()
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 
-// it's important that you don't parse the webhook event data, it should be in the raw format
+// 不要解析webhook事件数据，这一点很重要，它应该是原始格式
 // 该路由必须注册在任何 JSON 解析中间件之前
 app.post("/webhooks/clerk", rawJson, (req, res) => {
   void clerkWebhookHandler(req, res);
