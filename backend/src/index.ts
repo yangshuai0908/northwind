@@ -12,6 +12,10 @@ import { clerkWebhookHandler } from "./webhooks/clerk";
 import { getEnv } from "./lib/env";
 import keepAliveCron from "./lib/cron";
 
+import meRouter from "./routes/meRouter";
+import productRouter from "./routes/productRouter";
+import streamRouter from "./routes/streamRouter";
+
 // 读取并校验环境变量；缺失或不合法会在此处直接抛错退出，避免带着错误配置运行
 const env = getEnv();
 const app = express();
@@ -35,6 +39,11 @@ app.use(clerkMiddleware());
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
+
+app.use("/api/me",meRouter)
+app.use("/api/products",productRouter)
+app.use("/api/stream", streamRouter);
+
 
 
 // 托管前端构建产物（Docker 镜像中由 Vite 构建阶段复制到 ./public）
@@ -61,6 +70,9 @@ if (fs.existsSync(publicDir)) {
     res.sendFile(path.join(publicDir, "index.html"), (err) => next(err))
   });
 }
+
+// todo: add error handling middleware
+
 
 app.listen(env.PORT, () => {
   console.log("Listening on port: ", env.PORT);
