@@ -37,7 +37,7 @@ if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
 
   // SPA 兜底路由：非静态资源的路径都返回 index.html，交给前端路由处理
-  app.get("*", (req, res, next) => {
+  app.get("/{*any}", (req, res, next) => {
     // 只处理 GET/HEAD，其余方法交由后续路由或 404
     if (req.method !== "GET" && req.method !== "HEAD") {
       next();
