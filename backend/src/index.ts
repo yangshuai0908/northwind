@@ -15,6 +15,7 @@ import keepAliveCron from "./lib/cron";
 import meRouter from "./routes/meRouter";
 import productRouter from "./routes/productRouter";
 import streamRouter from "./routes/streamRouter";
+import chekoutRouter from "./routes/chekoutRouter";
 
 // 读取并校验环境变量；缺失或不合法会在此处直接抛错退出，避免带着错误配置运行
 const env = getEnv();
@@ -28,6 +29,10 @@ const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 app.post("/webhooks/clerk", rawJson, (req, res) => {
   void clerkWebhookHandler(req, res);
 });
+
+// app.post("/webhooks/polar", rawJson, (req, res) => {
+//   void polarWebhookHandler(req, res);
+// });
 
 
 app.use(express.json());
@@ -43,7 +48,7 @@ app.get("/health", (_req, res) => {
 app.use("/api/me",meRouter)
 app.use("/api/products",productRouter)
 app.use("/api/stream", streamRouter);
-
+app.use("/api/checkout", chekoutRouter);
 
 
 // 托管前端构建产物（Docker 镜像中由 Vite 构建阶段复制到 ./public）
