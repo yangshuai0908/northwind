@@ -38,7 +38,8 @@ RUN npm install --omit=dev --no-audit --no-fund && npm cache clean --force
 COPY --from=backend-build /app/dist ./dist
 COPY --from=frontend-build /app/frontend/dist ./public
 
-EXPOSE 3001
+# EXPOSE 3001
+EXPOSE 1998
 # 以非 root 用户运行，降低容器内权限
 USER node
 
