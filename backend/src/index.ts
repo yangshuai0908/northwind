@@ -10,6 +10,7 @@ import path from "node:path";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkWebhookHandler } from "./webhooks/clerk";
 import { getEnv } from "./lib/env";
+import keepAliveCron from "./lib/cron";
 
 // 读取并校验环境变量；缺失或不合法会在此处直接抛错退出，避免带着错误配置运行
 const env = getEnv();
@@ -29,6 +30,12 @@ app.use(express.json());
 app.use(cors())
 // 把 Clerk 的认证信息挂载到 req.auth，供后续路由/中间件读取
 app.use(clerkMiddleware());
+
+
+app.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});
+
 
 // 托管前端构建产物（Docker 镜像中由 Vite 构建阶段复制到 ./public）
 // 本地开发时不存在该目录，因此需要先判断，避免 express.static 报路径错误
@@ -56,5 +63,9 @@ if (fs.existsSync(publicDir)) {
 }
 
 app.listen(env.PORT, () => {
-  console.log("Server running on port " + env.PORT);
+  console.log("Listening on port: ", env.PORT);
+  // 启动定时任务，定期向前端健康检查端点发送请求，避免前端容器被云平台休眠
+  if (env.NODE_ENV === "production") {
+    keepAliveCron.start();
+  }
 });
