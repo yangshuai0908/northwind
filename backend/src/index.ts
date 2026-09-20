@@ -17,6 +17,9 @@ import productRouter from "./routes/productRouter";
 import streamRouter from "./routes/streamRouter";
 import chekoutRouter from "./routes/chekoutRouter";
 
+
+import { polarWebhookHandler } from "./webhooks/polar";
+
 // 读取并校验环境变量；缺失或不合法会在此处直接抛错退出，避免带着错误配置运行
 const env = getEnv();
 const app = express();
@@ -30,9 +33,9 @@ app.post("/webhooks/clerk", rawJson, (req, res) => {
   void clerkWebhookHandler(req, res);
 });
 
-// app.post("/webhooks/polar", rawJson, (req, res) => {
-//   void polarWebhookHandler(req, res);
-// });
+app.post("/webhooks/polar", rawJson, (req, res) => {
+  void polarWebhookHandler(req, res);
+});
 
 
 app.use(express.json());
