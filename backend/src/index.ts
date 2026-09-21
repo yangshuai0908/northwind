@@ -18,6 +18,7 @@ import meRouter from "./routes/meRouter";
 import productRouter from "./routes/productRouter";
 import streamRouter from "./routes/streamRouter";
 import chekoutRouter from "./routes/chekoutRouter";
+import adminRouter from "./routes/adminRouter";
 
 import { polarWebhookHandler } from "./webhooks/polar";
 import { sentryClerkUserMiddleware } from "./middleware/sentryClerkUser";
@@ -56,7 +57,7 @@ app.use("/api/me",meRouter)
 app.use("/api/products",productRouter)
 app.use("/api/stream", streamRouter);
 app.use("/api/checkout", chekoutRouter);
-
+app.use("/api/admin", adminRouter);
 
 // 托管前端构建产物（Docker 镜像中由 Vite 构建阶段复制到 ./public）
 // 本地开发时不存在该目录，因此需要先判断，避免 express.static 报路径错误
