@@ -11,7 +11,7 @@ import { SentryDemoPage } from "./pages/SentryDemoPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import OrderSummaryPage from "./pages/OrderSummaryPage";
 import OrderChatPage from "./pages/OrderChatPage";
-
+import OrderVideoPage from "./pages/OrderVideoPage";
 
 
 function App() {
