@@ -140,6 +140,8 @@ export async function createCheckout(req: Request, res: Response, next: NextFunc
 
     res.json({ checkoutUrl: checkout.url });
   } catch (e) {
+    // 显式打印：Express 默认错误处理只返回 500，不打印上下文，排查时很难定位
+    console.error("[checkout] 创建结算会话失败:", e);
     next(e);
   }
 }
