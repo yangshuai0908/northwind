@@ -122,8 +122,9 @@ export async function polarWebhookHandler(req: Request, res: Response) {
     // 签名必须基于原始字节：已解析成对象的 body 重新序列化后可能与原文不一致，导致验签失败
     const raw = req.body instanceof Buffer ? req.body : Buffer.from(String(req.body));
 
-    // Standard Webhooks 要求密钥以 base64 形式传入
-    const wh = new Webhook(Buffer.from(env.POLAR_WEBHOOK_SECRET, "utf8").toString("base64"));
+    // Standard Webhooks 的密钥：库本身支持 whsec_ 前缀并自动解析，
+    // 不要再做额外的编码转换（双重编码会导致验签必然失败）
+    const wh = new Webhook(env.POLAR_WEBHOOK_SECRET);
 
     const id = headerString(req.headers, "webhook-id");
     const ts = headerString(req.headers, "webhook-timestamp"); // 时间戳参与签名，可防重放
