@@ -7,6 +7,11 @@ import CartPage from './pages/CartPage';
 import OrdersPage from './pages/OrdersPage';
 import CheckoutReturnPage from "./pages/CheckoutReturnPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import { SentryDemoPage } from "./pages/SentryDemoPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
+import OrderSummaryPage from "./pages/OrderSummaryPage";
+import OrderChatPage from "./pages/OrderChatPage";
+
 
 
 function App() {
@@ -23,7 +28,19 @@ function App() {
           path="/orders"
           element={isSignedIn ? <OrdersPage /> : <Navigate to={"/"} replace />}
         />
-         <Route path="/checkout/return" element={<CheckoutReturnPage />} />
+        <Route path="/checkout/return" element={<CheckoutReturnPage />} />
+        <Route path="/demo-sentry" element={<SentryDemoPage />} />
+         <Route
+          path="/orders/:id/call"
+          element={isSignedIn ? <OrderVideoPage /> : <Navigate to={"/"} replace />}
+        />
+
+         {/* 嵌套路由 */}
+        <Route path="/orders/:id" element={<OrderDetailPage />}>
+          <Route index element={<OrderSummaryPage />} />
+          <Route path="chat" element={<OrderChatPage />} />
+        </Route>
+
       </Routes>
     </Layout>
   )
